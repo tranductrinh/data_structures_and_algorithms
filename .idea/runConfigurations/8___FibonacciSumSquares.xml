@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="8 - FibonacciSumSquares" type="Application" factoryName="Application" folderName="Java - course1 - week2">
+    <option name="MAIN_CLASS_NAME" value="FibonacciSumSquares" />
+    <module name="data_structures_and_algorithms" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
