@@ -1,0 +1,103 @@
+const readline = require('readline');
+const rl = readline.createInterface({
+	input: process.stdin,
+	terminal: false
+});
+
+process.stdin.setEncoding('utf8');
+
+const countMatch = (d, a, b, c) => {
+	let count = 0;
+	let i = d.length - 1;
+	let j = d[0].length - 1;
+	let k = d[0][0].length - 1;
+
+	while (i > 0 && j > 0 && k > 0) {
+		if (a[i - 1] === b[j - 1] && b[j - 1] === c[k - 1]) {
+			count++;
+			i = i - 1;
+			j = j - 1;
+			k = k - 1;
+		} else {
+			const max = Math.max(d[i - 1][j][k], Math.max(d[i][j - 1][k], d[i][j][k - 1]));
+			if (max === d[i - 1][j][k]) {
+				i = i - 1;
+			} else if (max === d[i][j - 1][k]) {
+				j = j - 1;
+			} else {
+				k = k - 1;
+			}
+		}
+	}
+
+	return count;
+};
+
+const memorize = (a, b, c) => {
+	const n = a.length;
+	const m = b.length;
+	const h = c.length;
+
+	const d = new Array(n + 1);
+	for (let i = 0; i <= n; i++) {
+		d[i] = new Array(m + 1);
+
+		for (let j = 0; j <= m; j++) {
+			d[i][j] = new Array(h + 1).fill(0);
+		}
+	}
+
+	for (let k = 1; k <= h; k++) {
+		for (let j = 1; j <= m; j++) {
+			for (let i = 1; i <= n; i++) {
+				if (a[i - 1] === b[j - 1] && b[j - 1] === c[k - 1]) {
+					d[i][j][k] = d[i - 1][j - 1][k - 1] + 1;
+				} else {
+					d[i][j][k] = Math.max(d[i - 1][j][k], Math.max(d[i][j - 1][k], d[i][j][k - 1]));
+				}
+			}
+		}
+	}
+
+	return d;
+};
+
+const lcs3 = (a, b, c) => {
+	const d = memorize(a, b, c);
+	return countMatch(d, a, b, c);
+
+};
+
+rl.once('line', line => {
+	parseInt(line, 10);
+	let a = [];
+	let b = [];
+	let c = [];
+
+	rl.once('line', line => {
+		a = line.toString().split(' ').map(Number);
+
+		rl.once('line', line => {
+			parseInt(line, 10);
+
+			rl.once('line', line => {
+				b = line.toString().split(' ').map(Number);
+
+				rl.once('line', line => {
+					parseInt(line, 10);
+
+					rl.once('line', line => {
+						c = line.toString().split(' ').map(Number);
+
+						process.stdout.write('' + lcs3(a, b, c));
+						process.exit();
+					});
+
+				});
+
+			});
+		});
+	})
+});
+
+module.exports = lcs3;
